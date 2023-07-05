@@ -46,7 +46,7 @@ check_settings() {
 check_folder() {
 	if [ ! -d $1 ]; then
 		echo "Folder '$1' does not exist."
-		exit 1
+		mkdir "$1"
 	elif [ ! -w $1 ]; then
 		echo "Folder '$1' not writable."
 		exit 1

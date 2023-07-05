@@ -35,13 +35,13 @@ is_input_empty(){
 }
 
 check_settings() {
-	if [ ! "$BUILDS" ]; then
+	if [ ! $BUILDS ]; then
 		echo "'BUILDS' not specified in /etc/sboutils.conf."
 		exit 1
-	elif [ ! "$PKGS" ]; then
+	elif [ ! $PKGS ]; then
 		echo "'PKGS' not specified in /etc/sboutils.conf."
 		exit 1
-	elif [ ! "$ARCH" ]; then
+	elif [ ! $ARCH ]; then
 		echo "'ARCH' not specified in /etc/sboutils.conf."
 		exit 1
 	fi
@@ -50,7 +50,7 @@ check_settings() {
 check_folder() {
 	if [ ! -d $1 ]; then
 		echo "Folder '$1' does not exist."
-		exit 1
+		mkdir "$1"
 	elif [ ! -w $1 ]; then
 		echo "Folder '$1' not writable."
 		exit 1
@@ -192,7 +192,11 @@ check_md5sum_source_title(){
 build(){
 	set -e
 	bash ./$PRGNAM.SlackBuild
-	
+
+	if [ "$PKGS" != "/tmp" ] && [ "$PKGS" != "/tmp/" ]; then
+		mv /tmp/$PACKAGE_NAME $PKGS/$PACKAGE_NAME
+	fi
+
 	if [ "$SBO_PKGLINT" = "yes" ]; then
 		sbopkglint
 	fi
@@ -286,6 +290,7 @@ main(){
 	options "$@"
 	check_folder $PWD
 	check_folder $BUILDS
+	check_folder $PKGS
 	check_files $DIRNAM.SlackBuild
 	check_files $DIRNAM.info
 	load_info
