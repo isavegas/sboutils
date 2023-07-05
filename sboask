@@ -342,9 +342,9 @@ display_requires(){
 
 hoorex_create_array(){
 	if [ "$2" = "DEPS" ]; then
-		hoorex=$(hoorex -r "$1")
+		hoorex=$(hoorex -s $SYNC/$RELEASE -r "$1")
 	else
-		hoorex=$(hoorex "$1")
+		hoorex=$(hoorex -s $SYNC/$RELEASE "$1")
 	fi
 		
 	if [ -z "$hoorex" ]; then
